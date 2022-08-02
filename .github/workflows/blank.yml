@@ -1,0 +1,26 @@
+name: create-a-branch
+on:
+  workflow_dispatch:
+    inputs:
+       branch_name:
+        required: true
+        type: string
+       base_branch:
+         required: true
+         type: string
+
+jobs:
+  create_branch:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout a repo at the desired base branch
+      - uses: actions/checkout@v3 
+        with: 
+          ref: "{{ inputs.base_branch }}"
+          
+      - name: create branch
+        run: |
+          git config user.name ROBOTS
+          git config user.email ROBOTS@github.com
+          git checkout -b {{ inputs.branch_name }}
+          git push --set-upstream origin $(git branch --show-current)
